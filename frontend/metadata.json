@@ -1,0 +1,6 @@
+{
+  "name": "EasyCarRent - Premium Car Rental Management System",
+  "description": "Modern, responsive Car Rental Management System with customer booking portal and comprehensive admin management dashboard.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
