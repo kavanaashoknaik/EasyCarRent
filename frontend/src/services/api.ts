@@ -11,7 +11,7 @@ export const API_BASE_URL =
 export const MODE_STORAGE_KEY = 'easycarrent_mode'; // 'live' | 'mock' | 'auto'
 
 export function getAppMode(): 'live' | 'mock' | 'auto' {
-  return (localStorage.getItem(MODE_STORAGE_KEY) as 'live' | 'mock' | 'auto') || 'auto';
+  return (localStorage.getItem(MODE_STORAGE_KEY) as 'live' | 'mock' | 'auto') || 'live';
 }
 
 export function setAppMode(mode: 'live' | 'mock' | 'auto'): void {
@@ -39,17 +39,12 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response Interceptor: Format error message and handle 401/403
+// Response Interceptor: Handle 401/403
 api.interceptors.response.use(
   (response) => response,
   (error: AxiosError<{ message?: string; errors?: Record<string, string> }>) => {
     if (error.response?.status === 401) {
-      // 401 Unauthorized
-      const currentToken = localStorage.getItem('token');
-      if (currentToken) {
-        // If expired or unauthorized, notify or clear
-        console.warn('Authentication expired or unauthorized.');
-      }
+      console.warn('Authentication expired or unauthorized.');
     }
     return Promise.reject(error);
   }
@@ -60,7 +55,6 @@ export function getErrorMessage(error: unknown): string {
   if (axios.isAxiosError(error)) {
     const data = error.response?.data;
     if (data?.errors) {
-      // Validation error map: {"phone": "Phone number must be 10 digits"}
       const errorList = Object.values(data.errors);
       if (errorList.length > 0) return String(errorList[0]);
     }
